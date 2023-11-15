@@ -19,14 +19,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        self.view.backgroundColor = UIColor.black
         //Reinforce that the initial tip percent is 15%
         customTipPercentSlider.value = 15
         
+        inputTextField.becomeFirstResponder()
         inputTextField.placeholder = "Enter Bill"
         
-        //Select the TextField so keypad displays when the view loads
-        inputTextField.becomeFirstResponder()
     }
     
     @IBAction func calculateTip(_ sender: Any) {
