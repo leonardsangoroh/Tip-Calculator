@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipCustomLabel: UILabel!
     @IBOutlet weak var totalCustomLabel: UILabel!
     @IBOutlet weak var inputTextField: UITextField!
+    @IBOutlet weak var customNumberOfPeopleLabel: UILabel!
+    @IBOutlet weak var customNumberOfPeopleSlider: UISlider!
+    @IBOutlet weak var totalBillPerPersonLabel: UILabel!
     
     
     
@@ -22,8 +25,8 @@ class ViewController: UIViewController {
         self.view.backgroundColor = UIColor.black
         //Reinforce that the initial tip percent is 15%
         customTipPercentSlider.value = 15
+        customNumberOfPeopleSlider.value = 5
         
-        inputTextField.becomeFirstResponder()
         inputTextField.placeholder = "Enter Bill"
         
     }
@@ -32,6 +35,7 @@ class ViewController: UIViewController {
         var decimal100: Double
         decimal100 = 100.0
         var customPercent: Double
+        var customNumberOfPeople: Int
         var billAmount: Double
         var inputDouble: Double
                 
@@ -43,14 +47,19 @@ class ViewController: UIViewController {
                 
         //convert slider value to a decimal number and store in a variable
         let sliderValue = Int(customTipPercentSlider.value)
+        let numberOfPeople = Int(customNumberOfPeopleSlider.value)
                 
         //convert the slider value to percent
         customPercent = Double(sliderValue)/decimal100
+        
+        //assign number of people to custom number of people
+        customNumberOfPeople = numberOfPeople
                 
         //identify who did generate the event. Was the slider?
         if sender is UISlider {
             //the thumb has been moved by the user, so update the label with the new custom percent
             customTipPercentLabel.text = NumberFormatter.localizedString(from: NSNumber(value:customPercent), number: NumberFormatter.Style.percent)
+            customNumberOfPeopleLabel.text = NumberFormatter.localizedString(from: NSNumber(value:customNumberOfPeople), number: NumberFormatter.Style.none)
         }
                 
         //if there's a bill amount, calculate the new tip and total
@@ -62,12 +71,15 @@ class ViewController: UIViewController {
             if sender is UITextField {
                 //update the billAmount with the currency format
                 billAmountLabel.text = " " + formatAsCurrency(number: billAmount)
+    
             }
                     
             //calculate and display the tip and the total with currency format
             let customTip = billAmount * customPercent
+            let billPerPersonAmount = (billAmount + customTip)/Double(numberOfPeople)
                 tipCustomLabel.text = formatAsCurrency(number:customTip)
                 totalCustomLabel.text = formatAsCurrency(number:billAmount + customTip)
+                totalBillPerPersonLabel.text = formatAsCurrency(number:billPerPersonAmount)
             }
             else {
                 //clear all labels
@@ -75,6 +87,7 @@ class ViewController: UIViewController {
                 customTipPercentLabel.text = NumberFormatter.localizedString(from: NSNumber(value: customPercent), number: NumberFormatter.Style.percent)
                 tipCustomLabel.text = " "
                 totalCustomLabel.text = " "
+                totalBillPerPersonLabel.text = " "
             }
     }
     
